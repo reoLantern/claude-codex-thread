@@ -29,3 +29,14 @@ rm "$TMPSTDERR"
 - 自行规划向 Codex 问什么、问几轮，不需要每步请示用户
 - 每次新对话前先运行 `grep -E "^model" ~/.codex/config.toml` 确认当前模型
 - 对话结束后向用户汇总 Codex 的核心观点，并告知 SESSION_ID 供续接
+
+## Slash Command
+
+用户也可以显式触发：
+
+```
+/claude-codex-thread:codex-chat 话题或问题
+/claude-codex-thread:codex-chat --session <SESSION_ID> 追问
+```
+
+当用户需要续接之前的 Codex 对话时，提示他们用 `--session` 参数。
