@@ -36,9 +36,11 @@ grep -E "^model" ~/.codex/config.toml
 
 ## 解析 $ARGUMENTS
 
-- 若含 `--session SESSION_ID`，提取 SESSION_ID，其余文字作为问题。
-- 否则全部 $ARGUMENTS 作为问题，开启新 session。
-- 若 $ARGUMENTS 为空，先询问用户想问 Codex 什么。
+- 若含 `--session SESSION_ID`，提取 SESSION_ID，其余文字作为问题或话题。
+- 否则全部 $ARGUMENTS 作为问题或话题，开启新 session。
+- 若 $ARGUMENTS 为空，先询问用户想讨论什么。
+
+**若 $ARGUMENTS 是一个宽泛的话题**（而非具体问题），由你自行规划需要向 Codex 问什么、问几轮，主动推进对话，最后向用户汇总结论。不需要每一步都请示用户。
 
 ## 开启新 session
 
