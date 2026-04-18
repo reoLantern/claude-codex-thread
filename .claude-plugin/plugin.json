@@ -1,12 +1,12 @@
 {
-  "name": "codex-skills",
+  "name": "claude-codex-thread",
   "description": "Multi-turn Codex conversations for Claude Code — uses codex exec resume to maintain session context across Bash calls.",
   "version": "1.0.0",
   "author": {
     "name": "reoLantern"
   },
-  "repository": "https://github.com/reoLantern/codex-skills",
-  "homepage": "https://github.com/reoLantern/codex-skills#readme",
+  "repository": "https://github.com/reoLantern/claude-codex-thread",
+  "homepage": "https://github.com/reoLantern/claude-codex-thread#readme",
   "license": "MIT",
   "keywords": [
     "codex",
