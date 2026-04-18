@@ -1,4 +1,4 @@
-# Codex 多轮对话
+# claude-codex-thread：Codex 多轮对话
 
 你可以在对话中随时使用 Codex CLI 进行多轮讨论。当用户提示"可以问问 Codex"、"和 Codex 讨论一下"或类似表达时，主动使用以下方式。
 
