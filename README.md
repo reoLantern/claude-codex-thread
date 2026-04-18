@@ -23,22 +23,16 @@ model_reasoning_effort = "xhigh"
 
 ## Usage
 
-**提具体问题**（Claude 直接问 Codex）：
+**自然语言触发**（主要方式）：安装后无需任何命令，在与 Claude 的对话中直接说：
+
+> "你也可以去问问 Codex 关于 xxx 的看法"
+
+Claude 会自主规划提问、管理 session、多轮推进，最后向你汇总结论。Session ID 由 Claude 全程维护，用户无需感知。
+
+**显式触发**：
 
 ```
-/claude-codex-thread:codex-chat 这段代码的性能瓶颈在哪里？
+/claude-codex-thread:codex-chat 话题或问题
 ```
 
-**给宽泛话题**（Claude 自主规划提问、多轮推进，最后汇总）：
-
-```
-/claude-codex-thread:codex-chat 深入探讨一下 imm32 的编码方案
-```
-
-**续接已有会话**：
-
-```
-/claude-codex-thread:codex-chat --session <SESSION_ID> 追问
-```
-
-启动时 Claude 会读取 `~/.codex/config.toml` 并汇报当前模型配置。新 session 结束后会显示 SESSION_ID，供后续续接使用。
+启动时 Claude 会读取 `~/.codex/config.toml` 并汇报当前模型配置。
