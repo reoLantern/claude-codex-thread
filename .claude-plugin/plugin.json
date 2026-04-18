@@ -1,0 +1,17 @@
+{
+  "name": "codex-skills",
+  "description": "Multi-turn Codex conversations for Claude Code — uses codex exec resume to maintain session context across Bash calls.",
+  "version": "1.0.0",
+  "author": {
+    "name": "reoLantern"
+  },
+  "repository": "https://github.com/reoLantern/codex-skills",
+  "homepage": "https://github.com/reoLantern/codex-skills#readme",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "multi-turn",
+    "session",
+    "conversation"
+  ]
+}
