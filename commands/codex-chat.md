@@ -1,21 +1,32 @@
 ---
-description: "Start or continue a multi-turn Codex conversation"
-argument-hint: "[question] [--session SESSION_ID]"
+description: "与 Codex 进行多轮对话（支持跨 Bash 调用保持上下文）"
+argument-hint: "[问题] [--session SESSION_ID]"
 allowed-tools:
   - "Bash(codex exec*)"
 ---
 
 # Codex Chat
 
-Enables multi-turn conversations with Codex across multiple Bash calls. Each call is a new process; session files on disk carry the context forward.
+核心机制：每轮 Bash 调用是独立进程，通过磁盘上的 session 文件串联上下文。`codex exec resume` 是跨调用保持 Codex 对话的唯一方法。
 
-## Parsing $ARGUMENTS
+典型流程：
+```
+[用户提问] → codex exec → 得到 RESPONSE + SESSION_ID
+           → 思考，决定追问
+           → codex exec resume $SESSION_ID → 得到 RESPONSE
+           → 继续 resume...
 
-- If `--session SESSION_ID` is present, extract `SESSION_ID` and treat the remaining text as the question.
-- Otherwise, treat all of `$ARGUMENTS` as the question for a new session.
-- If `$ARGUMENTS` is empty, ask the user what they want to discuss with Codex before proceeding.
+[用户下次提问] → 用同一个 SESSION_ID 继续 resume
+              → Codex 记得之前所有对话
+```
 
-## Starting a new session
+## 解析 $ARGUMENTS
+
+- 若含 `--session SESSION_ID`，提取 SESSION_ID，其余文字作为问题。
+- 否则全部 $ARGUMENTS 作为问题，开启新 session。
+- 若 $ARGUMENTS 为空，先询问用户想问 Codex 什么。
+
+## 开启新 session
 
 ```bash
 TMPSTDERR=$(mktemp)
@@ -24,10 +35,9 @@ SESSION_ID=$(grep "session id" "$TMPSTDERR" | awk '{print $NF}')
 rm "$TMPSTDERR"
 ```
 
-- Do NOT use `--ephemeral` — the session file must be saved to disk for resume.
-- After getting the response, **tell the user the SESSION_ID** so they can resume later.
+**不能加 `--ephemeral`** — session 必须保存到磁盘，resume 才能读取。
 
-## Resuming an existing session
+## 续接已有 session
 
 ```bash
 TMPSTDERR=$(mktemp)
@@ -36,11 +46,13 @@ RESPONSE=$(codex exec resume --dangerously-bypass-approvals-and-sandbox \
 rm "$TMPSTDERR"
 ```
 
-- `codex exec resume` has no `-s` flag; use `--dangerously-bypass-approvals-and-sandbox` for full access.
-- Always use the exact `SESSION_ID`, never `--last` (unsafe when multiple sessions exist).
+注意：
+- `codex exec resume` 没有 `-s` 选项，用 `--dangerously-bypass-approvals-and-sandbox` 获取 full access。
+- TMPSTDERR 此处只是抑制 stderr 输出，不需要提取任何信息。
+- **始终用精确的 SESSION_ID，不用 `--last`**。`--last` 在多个 session 并发时会接到错误的 session。
 
-## After each response
+## 每轮结束后
 
-1. Show the response to the user.
-2. If this was a new session, show: `Session ID: <SESSION_ID>` — the user needs this to continue the conversation later.
-3. Ask if the user wants to follow up. If yes, resume using the same `SESSION_ID`.
+1. 向用户展示 Codex 的回复。
+2. 若是新 session，显示：`Session ID: <SESSION_ID>`，用户下次可用 `--session` 续接。
+3. 询问是否继续追问。若是，用同一 SESSION_ID resume。
