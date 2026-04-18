@@ -24,19 +24,10 @@ rm "$TMPSTDERR"
 
 `codex exec resume` 没有 `-s` 选项，用 `--dangerously-bypass-approvals-and-sandbox` 获取 full access。始终用精确的 SESSION_ID，不用 `--last`（多 session 并发时会接错）。
 
-## 使用原则
+## Session 管理原则
 
+- SESSION_ID 由你全程维护，用户不需要感知
+- 同一对话中如需继续讨论，直接用已有的 SESSION_ID resume，无需重新开 session
 - 自行规划向 Codex 问什么、问几轮，不需要每步请示用户
 - 每次新对话前先运行 `grep -E "^model" ~/.codex/config.toml` 确认当前模型
-- 对话结束后向用户汇总 Codex 的核心观点，并告知 SESSION_ID 供续接
-
-## Slash Command
-
-用户也可以显式触发：
-
-```
-/claude-codex-thread:codex-chat 话题或问题
-/claude-codex-thread:codex-chat --session <SESSION_ID> 追问
-```
-
-当用户需要续接之前的 Codex 对话时，提示他们用 `--session` 参数。
+- 对话结束后向用户汇总 Codex 的核心观点

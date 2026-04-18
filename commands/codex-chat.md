@@ -1,6 +1,6 @@
 ---
-description: "与 Codex 进行多轮对话（支持跨 Bash 调用保持上下文）"
-argument-hint: "[问题] [--session SESSION_ID]"
+description: "与 Codex 进行多轮对话"
+argument-hint: "[话题或问题]"
 allowed-tools:
   - "Bash(codex exec*)"
   - "Bash(grep*)"
@@ -16,9 +16,6 @@ allowed-tools:
            → 思考，决定追问
            → codex exec resume $SESSION_ID → 得到 RESPONSE
            → 继续 resume...
-
-[用户下次提问] → 用同一个 SESSION_ID 继续 resume
-              → Codex 记得之前所有对话
 ```
 
 ## 启动时：确认模型配置
@@ -36,11 +33,9 @@ grep -E "^model" ~/.codex/config.toml
 
 ## 解析 $ARGUMENTS
 
-- 若含 `--session SESSION_ID`，提取 SESSION_ID，其余文字作为问题或话题。
-- 否则全部 $ARGUMENTS 作为问题或话题，开启新 session。
-- 若 $ARGUMENTS 为空，先询问用户想讨论什么。
-
-**若 $ARGUMENTS 是一个宽泛的话题**（而非具体问题），由你自行规划需要向 Codex 问什么、问几轮，主动推进对话，最后向用户汇总结论。不需要每一步都请示用户。
+- $ARGUMENTS 为具体问题时，直接向 Codex 提问。
+- $ARGUMENTS 为宽泛话题时，由你规划提问角度和轮次，主动推进，最后汇总结论。
+- $ARGUMENTS 为空时，先询问用户想讨论什么。
 
 ## 开启新 session
 
@@ -67,8 +62,11 @@ rm "$TMPSTDERR"
 - TMPSTDERR 此处只是抑制 stderr 输出，不需要提取任何信息。
 - **始终用精确的 SESSION_ID，不用 `--last`**。`--last` 在多个 session 并发时会接到错误的 session。
 
+## Session 管理
+
+SESSION_ID 由你全程维护，用户不需要感知。同一对话中如需继续讨论，直接用已有的 SESSION_ID resume。
+
 ## 每轮结束后
 
 1. 向用户展示 Codex 的回复。
-2. 若是新 session，显示：`Session ID: <SESSION_ID>`，用户下次可用 `--session` 续接。
-3. 询问是否继续追问。若是，用同一 SESSION_ID resume。
+2. 询问是否继续追问。若是，用同一 SESSION_ID resume。
