@@ -8,7 +8,7 @@
       "name": "claude-codex-thread",
       "source": "./",
       "description": "Multi-turn Codex conversations for Claude Code — uses codex exec resume to maintain session context across Bash calls.",
-      "version": "1.0.1"
+      "version": "1.0.2"
     }
   ]
 }

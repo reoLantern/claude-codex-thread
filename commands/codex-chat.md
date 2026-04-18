@@ -1,5 +1,7 @@
 ---
-description: "与 Codex 进行多轮对话，使用 codex exec resume 跨 Bash 调用保持上下文。当用户提示"问问 Codex"、"和 Codex 讨论"或需要让 Codex 参与分析时，主动调用此技能。"
+description: "与 Codex 进行多轮对话，使用 codex exec resume 跨 Bash 调用保持上下文。
+TRIGGER when: 用户说"问问 Codex"、"让 Codex 看看"、"和 Codex 讨论"、"按 claude-codex-thread 的方式"或类似表达；需要第二个 AI 视角参与分析时。
+SKIP: 普通对话、不涉及 Codex 的任务。"
 argument-hint: "[话题或问题]"
 allowed-tools:
   - "Bash(codex exec*)"
