@@ -29,5 +29,5 @@ rm "$TMPSTDERR"
 - SESSION_ID 由你全程维护，用户不需要感知
 - 同一对话中如需继续讨论，直接用已有的 SESSION_ID resume，无需重新开 session
 - 自行规划向 Codex 问什么、问几轮，不需要每步请示用户
-- 每次新对话前先运行 `grep -E "^model" ~/.codex/config.toml` 确认当前模型
+- 每次新对话前先运行 `grep -E "^model" ~/.codex/config.toml` 确认当前模型和思考深度
 - 对话结束后向用户汇总 Codex 的核心观点
