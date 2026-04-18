@@ -3,6 +3,7 @@ description: "与 Codex 进行多轮对话（支持跨 Bash 调用保持上下�
 argument-hint: "[问题] [--session SESSION_ID]"
 allowed-tools:
   - "Bash(codex exec*)"
+  - "Bash(grep*)"
 ---
 
 # Codex Chat
@@ -19,6 +20,19 @@ allowed-tools:
 [用户下次提问] → 用同一个 SESSION_ID 继续 resume
               → Codex 记得之前所有对话
 ```
+
+## 启动时：确认模型配置
+
+在执行任何 Codex 调用前，先读取当前配置：
+
+```bash
+grep -E "^model" ~/.codex/config.toml
+```
+
+将结果展示给用户，例如：
+> 当前 Codex 配置：model = gpt-5.4, model_reasoning_effort = xhigh
+
+若文件不存在或无相关配置，提示用户 Codex 将使用默认模型。
 
 ## 解析 $ARGUMENTS
 
