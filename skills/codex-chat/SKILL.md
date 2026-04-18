@@ -4,6 +4,7 @@ description: |
   与 Codex 进行多轮对话，使用 codex exec resume 跨 Bash 调用保持上下文。
   TRIGGER when: 用户说"问问 Codex"、"让 Codex 看看"、"和 Codex 讨论"、"按 claude-codex-thread 的方式"或类似表达；需要第二个 AI 视角参与分析时。
   SKIP: 普通对话、不涉及 Codex 的任务。
+argument-hint: "[话题或问题]"
 allowed-tools:
   - "Bash(codex exec*)"
   - "Bash(grep*)"
@@ -31,6 +32,14 @@ grep -E "^model" ~/.codex/config.toml
 
 例如：
 > 当前 Codex 配置：model = gpt-5.4, 思考深度 = xhigh
+
+若文件不存在或无相关配置，提示用户 Codex 将使用默认模型。
+
+## 解析用户输入
+
+- 若是具体问题，直接向 Codex 提问。
+- 若是宽泛话题，由你规划提问角度和轮次，主动推进，最后汇总结论，不必每步请示用户。
+- 若没有具体内容，先询问用户想讨论什么。
 
 ## 开启新 session
 
@@ -61,8 +70,7 @@ rm "$TMPSTDERR"
 
 SESSION_ID 由你全程维护，用户不需要感知。同一对话中如需继续讨论，直接用已有的 SESSION_ID resume。
 
-## 使用原则
+## 每轮结束后
 
-- 若用户给的是宽泛话题而非具体问题，自行规划向 Codex 问什么、问几轮，主动推进
-- 不需要每步请示用户
-- 对话结束后向用户汇总 Codex 的核心观点
+1. 向用户展示 Codex 的回复（或汇总结论）。
+2. 询问是否继续追问。若是，用同一 SESSION_ID resume。
