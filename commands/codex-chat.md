@@ -1,5 +1,5 @@
 ---
-description: "与 Codex 进行多轮对话"
+description: "与 Codex 进行多轮对话，使用 codex exec resume 跨 Bash 调用保持上下文。当用户提示"问问 Codex"、"和 Codex 讨论"或需要让 Codex 参与分析时，主动调用此技能。"
 argument-hint: "[话题或问题]"
 allowed-tools:
   - "Bash(codex exec*)"
