@@ -8,6 +8,7 @@ argument-hint: "[话题或问题]"
 allowed-tools:
   - "Bash(codex exec*)"
   - "Bash(grep*)"
+  - "Monitor"
 ---
 
 # Codex Chat
@@ -69,6 +70,40 @@ rm "$TMPSTDERR"
 ## Session 管理
 
 SESSION_ID 由你全程维护，用户不需要感知。同一对话中如需继续讨论，直接用已有的 SESSION_ID resume。
+
+## 长任务模式
+
+Claude Code 的 Bash tool 默认 2 分钟超时、最长 10 分钟。xhigh + 大 prompt + 多文件输入时，单次 Codex 调用可能超过这些限制。按预估耗时分级：
+
+**预计 2–10 分钟**：前台 Bash 加大 timeout，或用 `run_in_background: true` 拿完成通知。调用 Bash 时把 `timeout` 设到 `600000`（10 分钟），命令结束你会收到通知。
+
+**预计可能超过 10 分钟**：用 `nohup` 让 codex 脱离 Bash tool 进程组，再用 Monitor 轮询 exit 哨兵文件。
+
+```bash
+WORK=$(mktemp -d)
+nohup bash -c "
+  codex exec -s danger-full-access \"\$QUESTION\" < /dev/null > $WORK/stdout 2> $WORK/stderr
+  echo \$? > $WORK/exit
+" > /dev/null 2>&1 &
+disown
+echo "WORK=$WORK"
+```
+
+接着用 Monitor 等待（内部 `sleep` 不受 Bash tool 超时约束）：
+
+```
+until [ -f $WORK/exit ]; do sleep 5; done; echo "DONE"
+```
+
+Monitor 事件到来后，读文件取结果：
+
+```bash
+RESPONSE=$(cat $WORK/stdout)
+SESSION_ID=$(grep "session id" $WORK/stderr | awk '{print $NF}')
+rm -rf $WORK
+```
+
+Resume 长任务同理：把 `codex exec resume --dangerously-bypass-approvals-and-sandbox $SESSION_ID "$QUESTION"` 放进同样的 nohup 壳即可。
 
 ## 每轮结束后
 
