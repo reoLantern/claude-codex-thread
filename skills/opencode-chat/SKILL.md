@@ -31,9 +31,9 @@ allowed-tools:
 - `--variant max` —— 思考深度
 - `--dangerously-skip-permissions` —— 跳过权限确认（独立于 config 的 `permission` 字段）
 
-如需改默认模型，编辑此 SKILL.md。首次调用前向用户告知：
+如需改默认模型，编辑此 SKILL.md。首次调用前向用户告知（措辞要让用户清楚这是 skill 内置默认、不读 opencode.json）：
 
-> 当前 opencode 调用：model = deepseek/deepseek-v4-pro, variant = max
+> 本次 opencode 调用将使用 model = deepseek/deepseek-v4-pro, variant = max（skill 内置默认，独立于你的 opencode 全局配置）
 
 ## 解析用户输入
 
