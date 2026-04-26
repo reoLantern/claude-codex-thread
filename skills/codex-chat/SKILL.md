@@ -32,7 +32,7 @@ grep -E "^model" ~/.codex/config.toml
 ```
 
 例如：
-> 当前 Codex 配置：model = gpt-5.4, 思考深度 = xhigh
+> 当前 Codex 配置：model = gpt-5.5, 思考深度 = xhigh
 
 若文件不存在或无相关配置，提示用户 Codex 将使用默认模型。
 
