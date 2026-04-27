@@ -1,7 +1,7 @@
 {
   "name": "claude-codex-thread",
   "description": "Multi-turn conversations with external AI CLIs (Codex, opencode) for Claude Code — maintains session context across Bash calls.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": {
     "name": "reoLantern"
   },
